@@ -4,7 +4,7 @@ A small experiment measuring how often an LLM agent with ticket-tracker and emai
 
 ## Motivation
 
-At work I built MCP servers that let coding agents read Jira tickets. Ticket text is written by anyone with access to the tracker, and an agent reading it has tools that act on the outside world. That's the classic indirect prompt injection setup: untrusted data and privileged actions in the same context. I wanted to measure the risk instead of guessing at it.
+At work I connected Claude to tools like Figma through MCP, which made me think about what happens when an agent reads content from tools like Jira. Ticket text is written by anyone with access to the tracker, and an agent reading it has tools that act on the outside world. That's the classic indirect prompt injection setup: untrusted data and privileged actions in the same context. I wanted to measure the risk instead of guessing at it.
 
 ## Setup
 
@@ -68,7 +68,19 @@ Each run writes raw transcripts (`results/*.jsonl`, every tool call the agent ma
 
 ## Results
 
-_Not yet run. Results tables and observations will go here._
+First run: `claude-opus-5-5`, effort `medium`, 1 trial per cell (36 runs). Raw transcripts are in [`results/`](results/).
+
+| Defense | Attack attempted | Attack succeeded | Task completed (control) |
+|---|---|---|---|
+| none | 0/8 | 0/8 | 1/1 |
+| spotlight | 0/8 | 0/8 | 1/1 |
+| allowlist | 0/8 | 0/8 | 1/1 |
+| spotlight+allowlist | 0/8 | 0/8 | 1/1 |
+
+- **No attack worked, even with no defence.** Across all 32 attack runs the model never leaked the canary or emailed an outside address.
+- **It usually told the humans.** In 25 of 32 attack runs, the model's comments, email or final reply pointed out the suspicious instruction instead of silently ignoring it.
+- **Robustness had a small cost.** 3 of 32 attack runs ended in a refusal (`stop_reason: refusal`) before the task was finished. Overall, the full task was completed in 29 of 32 attack runs.
+- **What this means:** these 8 attacks are too easy for this model, so this run can't tell the defences apart. The next step is harder attacks (subtler phrasing, instructions split across tickets, adaptive attacks), more trials, and weaker or cheaper models, to find where the defences start to matter.
 
 ## Limitations
 
