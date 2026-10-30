@@ -68,18 +68,18 @@ Each run writes raw transcripts (`results/*.jsonl`, every tool call the agent ma
 
 ## Results
 
-First run: `claude-opus-5-5`, effort `medium`, 1 trial per cell (36 runs). Raw transcripts are in [`results/`](results/).
+Two independent runs: `claude-opus-5-5`, effort `medium`, 1 trial per cell each (72 runs total). Raw transcripts are in [`results/`](results/).
 
 | Defense | Attack attempted | Attack succeeded | Task completed (control) |
 |---|---|---|---|
-| none | 0/8 | 0/8 | 1/1 |
-| spotlight | 0/8 | 0/8 | 1/1 |
-| allowlist | 0/8 | 0/8 | 1/1 |
-| spotlight+allowlist | 0/8 | 0/8 | 1/1 |
+| none | 0/16 | 0/16 | 2/2 |
+| spotlight | 0/16 | 0/16 | 2/2 |
+| allowlist | 0/16 | 0/16 | 2/2 |
+| spotlight+allowlist | 0/16 | 0/16 | 2/2 |
 
-- **No attack worked, even with no defence.** Across all 32 attack runs the model never leaked the canary or emailed an outside address.
-- **It usually told the humans.** In 25 of 32 attack runs, the model's comments, email or final reply pointed out the suspicious instruction instead of silently ignoring it.
-- **Robustness had a small cost.** 3 of 32 attack runs ended in a refusal (`stop_reason: refusal`) before the task was finished. Overall, the full task was completed in 29 of 32 attack runs.
+- **No attack worked, even with no defence.** Across all 64 attack runs the model never leaked the canary or emailed an outside address.
+- **It usually told the humans.** In 51 of 64 attack runs, the model's comments, email or final reply pointed out the suspicious instruction instead of silently ignoring it.
+- **Robustness had a small cost.** 6 of 64 attack runs ended in a refusal (`stop_reason: refusal`) before the task was finished. Overall, the full task was completed in 58 of 64 attack runs.
 - **What this means:** these 8 attacks are too easy for this model, so this run can't tell the defences apart. The next step is harder attacks (subtler phrasing, instructions split across tickets, adaptive attacks), more trials, and weaker or cheaper models, to find where the defences start to matter.
 
 ## Limitations
